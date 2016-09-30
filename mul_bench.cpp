@@ -11,7 +11,7 @@ try{
 	using namespace std; using namespace gsl;
 	using namespace chrono;
 
-	int n = SIZE;
+	int n = 10'000;
 	int m = n;
 	vector<int> v(n*m,1);
 
