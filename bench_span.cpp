@@ -5,26 +5,14 @@
 #include <iomanip>
 
 int wid=30;
+
 int main(int argc, char* argv[])
 try{	
 	using namespace std; using namespace gsl;
 	using namespace chrono;
 
-	const int n = SIZE;
-	const int m = n;
-	vector<int> v(n*m,1);
-
-	// use span fixed size
-	{
-		cout << setw(wid)  << "span fixed size: ";
-		span<int, SIZE * SIZE> fixed_sp(v.data(),v.size());
-		auto s = high_resolution_clock::now();
-		for (int& e : fixed_sp)
-			e++;
-		auto f = high_resolution_clock::now();
-		cout << v[n / 2] << ' ';
-		cout << duration_cast<milliseconds>(f - s).count() << '\n';
-	}
+	vector<int> v(100'000'000,1);
+	int n = v.size();
 	// use dynamic size span
 	{
 		cout << setw(wid)  << "span dynamic size: ";
@@ -54,17 +42,6 @@ try{
 		cout << v[n / 2] << ' ';
 		cout << duration_cast<milliseconds>(f - s).count() << '\n';
 	}
-	// use C-style for loop on pointers
-	{
-		cout << setw(wid)  << "C-style ptr for loop: ";
-		auto s = high_resolution_clock::now();
-		const int * end = v.data() + v.size();
-		for (int* p = v.data(); p != end; ++p)
-			(*p)++;
-		auto f = high_resolution_clock::now();
-		cout << v[n / 2] << ' ';
-		cout << duration_cast<milliseconds>(f - s).count() << '\n';
-	}
 	// use C-style for loop on indices
 	{
 		cout << setw(wid)  << "C-style indices for loop: ";
@@ -79,5 +56,5 @@ try{
 }
 catch (std::exception& e)
 {
-	std::cerr << e.what() << '\n';
+	std::cerr << "error: " << e.what() << '\n';
 }
